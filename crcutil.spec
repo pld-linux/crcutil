@@ -1,12 +1,12 @@
 #
 # Conditional build:
-%bcond_without	apidocs		# do not build and package API docs
+%bcond_with	apidocs		# do not build and package API docs
 %bcond_without	static_libs	# don't build static libraries
 
 Summary:	High performance CRC implementation
 Name:		crcutil
 Version:	1.0
-Release:	0.1
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 Source0:	https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/crcutil/%{name}-%{version}.tar.gz
@@ -91,9 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# if library provides pkgconfig file containing proper {Requires,Libs}.private
-# then remove .la pollution
-#%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -104,23 +102,20 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README AUTHORS
-%attr(755,root,root) %{_libdir}/%{name}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/%{name}.so.N
+%attr(755,root,root) %{_libdir}/libcrcutil.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libcrcutil.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%doc devel-doc/* ChangeLog NEWS TODO
-%attr(755,root,root) %{_libdir}/%{name}.so
-# if no pkgconfig support, or it misses .private deps, then include .la file
-#%{_libdir}/libFOO.la
-%{_includedir}/%{name}
-%{_aclocaldir}/%{name}.m4
-%{_pkgconfigdir}/%{name}.pc
+%doc doc/crc.pdf INSTALL ChangeLog NEWS
+%{_libdir}/libcrcutil.so
+%{_includedir}/crcutil
+%{_pkgconfigdir}/libcrcutil.pc
 
 %if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/%{name}.a
+%{_libdir}/libcrcutil.a
 %endif
 
 %if %{with apidocs}
