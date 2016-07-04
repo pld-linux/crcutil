@@ -1,0 +1,33 @@
+Last-Update: 2015-02-27
+Forwarded: https://code.google.com/p/crcutil/issues/detail?id=9
+Author: Dmitry Smirnov <onlyjob@member.fsf.org>
+Description: fix tests on non-x86
+
+--- a/tests/unittest.h
++++ b/tests/unittest.h
+@@ -110,9 +110,9 @@
+   ~GenericCrcTest() {}
+   void InitWithCrc32c(const Crc &generating_polynomial,
+                       size_t degree,
+                       bool constant) {
+-    Init(generating_polynomial, degree, constant);
++    this->Init(generating_polynomial, degree, constant);
+   }
+ 
+   bool HaveCrc32c() const {
+     return false;
+@@ -615,12 +615,14 @@
+            "Functional test of %s (size=%u bytes",
+            class_title,
+            static_cast<int>(
+               sizeof(GenericCrc<Crc, TableEntry, Word, kStride>)));
++#if HAVE_AMD64 || HAVE_I386
+     if (this->HaveCrc32c()) {
+       fprintf(stderr, " [generic], %u bytes [CRC32C]",
+           static_cast<int>(sizeof(Crc32cSSE4)));
+     }
++#endif
+     fprintf(stderr, ")\n");
+     fflush(stderr);
+ 
+     VerifyPow();

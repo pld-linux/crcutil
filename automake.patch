@@ -1,0 +1,66 @@
+https://code.google.com/archive/p/crcutil/issues/3
+
+Last-Update: 2014-12-07
+Forwarded: no
+Author: Dmitry Smirnov <onlyjob@member.fsf.org>
+Description: modernise automake
+ Recent automake defaults to running tests in parallel which redirects
+ `make check` output to log. Setting "serial-tests" restores old behaviour.
+~~~~
+ configure.ac:6: warning: AM_INIT_AUTOMAKE: two- and three-arguments forms are deprecated.  For more info, see:
+ configure.ac:6: http://www.gnu.org/software/automake/manual/automake.html#Modernize-AM_005fINIT_005fAUTOMAKE-invocation
+
+ Makefile.am:5: warning: source file 'code/crc32c_sse4.cc' is in a subdirectory,
+ Makefile.am:5: but option 'subdir-objects' is disabled
+ automake: warning: possible forward-incompatibility.
+ automake: At least a source file is in a subdirectory, but the 'subdir-objects'
+ automake: automake option hasn't been enabled.  For now, the corresponding output
+ automake: object file(s) will be placed in the top-level directory.  However,
+ automake: this behaviour will change in future Automake versions: they will
+ automake: unconditionally cause object files to be placed in the same subdirectory
+ automake: of the corresponding sources.
+ automake: You are advised to start using 'subdir-objects' option throughout your
+ automake: project, to avoid future incompatibilities.
+ Makefile.am:5: warning: source file 'code/multiword_128_64_gcc_amd64_sse2.cc' is in a subdirectory,
+ Makefile.am:5: but option 'subdir-objects' is disabled
+ Makefile.am:5: warning: source file 'code/multiword_64_64_cl_i386_mmx.cc' is in a subdirectory,
+ Makefile.am:5: but option 'subdir-objects' is disabled
+ Makefile.am:5: warning: source file 'code/multiword_64_64_gcc_amd64_asm.cc' is in a subdirectory,
+ Makefile.am:5: but option 'subdir-objects' is disabled
+ Makefile.am:5: warning: source file 'code/multiword_64_64_gcc_i386_mmx.cc' is in a subdirectory,
+ Makefile.am:5: but option 'subdir-objects' is disabled
+ Makefile.am:5: warning: source file 'tests/set_hi_pri.c' is in a subdirectory,
+ Makefile.am:5: but option 'subdir-objects' is disabled
+ Makefile.am:5: warning: source file 'tests/unittest.cc' is in a subdirectory,
+ Makefile.am:5: but option 'subdir-objects' is disabled
+ Makefile.am:9: warning: source file 'code/crc32c_sse4.cc' is in a subdirectory,
+ Makefile.am:9: but option 'subdir-objects' is disabled
+ Makefile.am:9: warning: source file 'code/multiword_128_64_gcc_amd64_sse2.cc' is in a subdirectory,
+ Makefile.am:9: but option 'subdir-objects' is disabled
+ Makefile.am:9: warning: source file 'code/multiword_64_64_cl_i386_mmx.cc' is in a subdirectory,
+ Makefile.am:9: but option 'subdir-objects' is disabled
+ Makefile.am:9: warning: source file 'code/multiword_64_64_gcc_amd64_asm.cc' is in a subdirectory,
+ Makefile.am:9: but option 'subdir-objects' is disabled
+ Makefile.am:9: warning: source file 'code/multiword_64_64_gcc_i386_mmx.cc' is in a subdirectory,
+ Makefile.am:9: but option 'subdir-objects' is disabled
+ Makefile.am:9: warning: source file 'examples/interface.cc' is in a subdirectory,
+ Makefile.am:9: but option 'subdir-objects' is disabled
+ Makefile.am:9: warning: source file 'examples/usage.cc' is in a subdirectory,
+ Makefile.am:9: but option 'subdir-objects' is disabled
+~~~~
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,10 +1,10 @@
+ #                                               -*- Autoconf -*-
+ # Process this file with autoconf to produce a configure script.
+ 
+ AC_PREREQ([2.65])
+-AC_INIT(crcutil, 1.0, crcutil@googlegroups.com)
+-AM_INIT_AUTOMAKE(crcutil, 1.0)
++AC_INIT([crcutil], [1.0], [crcutil@googlegroups.com], [crcutil])
++AM_INIT_AUTOMAKE([subdir-objects serial-tests])
+ AC_CONFIG_FILES([Makefile]) 
+ AC_OUTPUT()
+ AC_CONFIG_SRCDIR([tests/aligned_alloc.h])
+ AC_CONFIG_HEADERS([config.h])

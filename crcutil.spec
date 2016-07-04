@@ -12,10 +12,8 @@ Group:		Libraries
 Source0:	https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/crcutil/%{name}-%{version}.tar.gz
 # Source0-md5:	94cb7014d4078c138d3c9646fcf1fec5
 Patch0:		detect-mcrc32.patch
-Patch1:		http://storage.googleapis.com/google-code-attachments/crcutil/issue-9/comment-0/build-fix-tests.patch
-# Patch1-md5:	6b88d4eeef7e418c1eb6fc0ab729dca2
-Patch2:		http://storage.googleapis.com/google-code-attachments/crcutil/issue-3/comment-0/automake.patch
-# Patch2-md5:	b2c82d3ac05fc206944479aae2e17d8d
+Patch1:		build-fix-tests.patch
+Patch2:		automake.patch
 Patch3:		library.patch
 URL:		https://code.google.com/archive/p/crcutil/
 BuildRequires:	autoconf
