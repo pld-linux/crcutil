@@ -16,6 +16,7 @@ Patch1:		build-fix-tests.patch
 Patch2:		automake.patch
 Patch3:		library.patch
 Patch4:		build-unclobber.patch
+Patch5:		x32.patch
 URL:		https://code.google.com/archive/p/crcutil/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -75,6 +76,7 @@ Dokumentacja API biblioteki %{name}.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p3
 
 %build
 %{__libtoolize}
