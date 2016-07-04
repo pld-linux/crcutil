@@ -15,6 +15,7 @@ Patch0:		detect-mcrc32.patch
 Patch1:		build-fix-tests.patch
 Patch2:		automake.patch
 Patch3:		library.patch
+Patch4:		build-unclobber.patch
 URL:		https://code.google.com/archive/p/crcutil/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -73,6 +74,7 @@ Dokumentacja API biblioteki %{name}.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
