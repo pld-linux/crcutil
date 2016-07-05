@@ -21,7 +21,9 @@ URL:		https://code.google.com/archive/p/crcutil/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	intltool
+BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.583
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
