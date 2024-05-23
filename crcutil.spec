@@ -1,14 +1,15 @@
 #
 # Conditional build:
-%bcond_with	apidocs		# do not build and package API docs
-%bcond_without	static_libs	# don't build static libraries
+%bcond_without	static_libs	# static library
 
 Summary:	High performance CRC implementation
+Summary(pl.UTF-8):	Wydajna implementacja CRC
 Name:		crcutil
 Version:	1.0
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Libraries
+# project archived; further development can be found on e.g. https://github.com/yugabyte/crcutil
 Source0:	https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/crcutil/%{name}-%{version}.tar.gz
 # Source0-md5:	94cb7014d4078c138d3c9646fcf1fec5
 Patch0:		detect-mcrc32.patch
@@ -18,11 +19,11 @@ Patch3:		library.patch
 Patch4:		build-unclobber.patch
 Patch5:		x32.patch
 URL:		https://code.google.com/archive/p/crcutil/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.65
 BuildRequires:	automake
-BuildRequires:	intltool
+BuildRequires:	gcc-c++ >= 6:4.5
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.583
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -36,11 +37,21 @@ The new algorithm is heavily tuned towards modern Intel and AMD
 processors and is substantially faster than almost all other software
 CRC algorithms.
 
+%description -l pl.UTF-8
+Biblioteka crcutil dostarcza wydajną implementację algorytmu CRC.
+
+Zawiera referencyjną implementację nowego algorytmu Multiword CRC
+wymyślonego przez Andrew Kadatcha i Boba Jenkinsa na początku 2007
+roku. Nowy algorytm jest szczególnie dostosowany do nowych procesorów
+firm Intel oraz AMD i jest znacząco szybszy od większości innych
+programowych algorytmów CRC.
+
 %package devel
 Summary:	Header files for %{name} library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki %{name}
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libstdc++-devel
 
 %description devel
 Header files for %{name} library.
@@ -60,16 +71,16 @@ Static %{name} library.
 %description static -l pl.UTF-8
 Statyczna biblioteka %{name}.
 
-%package apidocs
-Summary:	%{name} API documentation
-Summary(pl.UTF-8):	Dokumentacja API biblioteki %{name}
+%package doc
+Summary:	Documentation for crcutil library
+Summary(pl.UTF-8):	Dokumentacja do biblioteki crcutil
 Group:		Documentation
 
-%description apidocs
-API documentation for %{name} library.
+%description doc
+Documentation for crcutil library.
 
-%description apidocs -l pl.UTF-8
-Dokumentacja API biblioteki %{name}.
+%description doc -l pl.UTF-8
+Dokumentacja do biblioteki crcutil.
 
 %prep
 %setup -q
@@ -88,14 +99,17 @@ Dokumentacja API biblioteki %{name}.
 %{__automake}
 %configure \
 	%{!?with_static_libs:--disable-static}
+
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__rm} $RPM_BUILD_ROOT/tmp/usage
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,14 +119,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README AUTHORS
+%doc AUTHORS ChangeLog NEWS README
 %attr(755,root,root) %{_libdir}/libcrcutil.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libcrcutil.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/crc.pdf INSTALL ChangeLog NEWS
-%{_libdir}/libcrcutil.so
+%attr(755,root,root) %{_libdir}/libcrcutil.so
 %{_includedir}/crcutil
 %{_pkgconfigdir}/libcrcutil.pc
 
@@ -122,8 +135,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libcrcutil.a
 %endif
 
-%if %{with apidocs}
-%files apidocs
+%files doc
 %defattr(644,root,root,755)
-%doc apidocs/*
-%endif
+%doc doc/crc.pdf
